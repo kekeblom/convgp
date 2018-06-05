@@ -6,7 +6,6 @@ import jug
 import numpy as np
 import pandas as pd
 import tensorflow as tf
-from tensorflow.examples.tutorials.mnist import input_data
 
 import GPflow
 import GPflow.minibatch as mb
@@ -35,12 +34,9 @@ def suppress_print():
 
 
 def load_mnist():
-    mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
-    X = np.vstack((mnist.train.images.astype(float), mnist.validation.images.astype('float')))
-    Y = np.vstack((np.argmax(mnist.train.labels, 1)[:, None],
-                   np.argmax(mnist.validation.labels, 1)[:, None]))
-    Xt = mnist.test.images.astype(float)
-    Yt = np.argmax(mnist.test.labels, 1)[:, None]
+    (X, Y), (Xt, Yt) = tf.keras.datasets.mnist.load_data()
+    (X, Y) = X.astype(np.float32), Y[:, None]
+    (Xt, Yt) = Xt.astype(np.float32), Yt[:, None]
     return X, Y, Xt, Yt
 
 
